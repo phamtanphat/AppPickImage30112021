@@ -18,28 +18,36 @@ public class MainActivity extends AppCompatActivity {
     String[] mArrNameImages;
     int mResourceIdRandom;
     Random mRandom;
-    MyCountDownTimer mMyCountDown;
+    long mTotalTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         // random 1 tấm bất kỳ trong 18 tấm
         init();
-        randomImage();
-        mMyCountDown.getInstance().countDown(5000, 1000, new MyCountDownTimer.OnListenerMyCountDown() {
+        event();
+
+    }
+
+    private void event() {
+        // listener
+        MyCountDownTimer.getInstance().countDown(mTotalTime, 1000, new MyCountDownTimer.OnListenerMyCountDown() {
             @Override
             public void onTick(long currentTime) {
-                Log.d("BBB",currentTime + "");
+                mProgressBarTime.setProgress((int) (currentTime / 1000));
+                Log.d("BBB","Current " + currentTime);
             }
 
             @Override
             public void onFinish() {
-                Log.d("BBB","onFinish");
+                mProgressBarTime.setProgress(0);
+                Log.d("BBB","finish ");
             }
         });
+        // handle
+        randomImage();
+
     }
 
     private void init(){
@@ -49,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
         mImgRandom = findViewById(R.id.imgRandom);
 
         mRandom = new Random();
+        mTotalTime = 5000;
+
+        //set max progressbar
+        mProgressBarTime.setMax((int) (mTotalTime / 1000));
+        mProgressBarTime.setProgress((int) (mTotalTime / 1000));
     }
 
     private void randomImage() {
