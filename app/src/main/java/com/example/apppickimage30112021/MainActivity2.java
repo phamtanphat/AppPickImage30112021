@@ -61,5 +61,19 @@ public class MainActivity2 extends AppCompatActivity {
             }
             mTbLayout.addView(tableRow);
         }
+        MyCountDownTimer.getInstance().onListenerTime(new MyCountDownTimer.OnListenerMyCountDown() {
+            @Override
+            public void onTick(long currentTime) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                Intent view = new Intent();
+                view.putExtra("message","Time out");
+                setResult(RESULT_CANCELED,view);
+                finish();
+            }
+        });
     }
 }

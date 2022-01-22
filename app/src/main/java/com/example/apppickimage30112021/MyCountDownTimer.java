@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 public class MyCountDownTimer {
     public static MyCountDownTimer instance;
     private CountDownTimer countDownTimer ;
+    OnListenerMyCountDown onListenerMyCountDown;
 
     private MyCountDownTimer(){
 
@@ -17,10 +18,9 @@ public class MyCountDownTimer {
         return instance;
     }
 
-    public void countDown(long totalTime , long interval , OnListenerMyCountDown onListenerMyCountDown){
+    public void countDown(long totalTime , long interval){
         if (countDownTimer != null){
             countDownTimer.cancel();
-            countDownTimer = null;
         }
         countDownTimer = new CountDownTimer(totalTime,interval) {
             @Override
@@ -39,6 +39,10 @@ public class MyCountDownTimer {
                 }
             }
         }.start();
+    }
+
+    public void onListenerTime(OnListenerMyCountDown onListenerTime){
+        onListenerMyCountDown = onListenerTime;
     }
 
     public void cancelTime(){

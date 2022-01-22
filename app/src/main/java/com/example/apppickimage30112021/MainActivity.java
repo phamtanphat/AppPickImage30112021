@@ -3,11 +3,13 @@ package com.example.apppickimage30112021;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -17,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     ProgressBar mProgressBarTime;
     TextView mTvPoint;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     int mResourceIdRandom;
     Random mRandom;
     long mTotalTime;
-
+    int mPoint = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void event() {
         // listener
-        MyCountDownTimer.getInstance().countDown(mTotalTime, 1000, new MyCountDownTimer.OnListenerMyCountDown() {
+        MyCountDownTimer.getInstance().onListenerTime(new MyCountDownTimer.OnListenerMyCountDown() {
             @Override
             public void onTick(long currentTime) {
+                Log.d("BBB",currentTime + "");
                 mProgressBarTime.setProgress((int) (currentTime / 1000));
-                Log.d("BBB", "Current " + currentTime);
             }
 
             @Override
             public void onFinish() {
                 mProgressBarTime.setProgress(0);
-                Log.d("BBB", "finish ");
             }
         });
         // handle
@@ -73,7 +74,10 @@ public class MainActivity extends AppCompatActivity {
         mImgRandom = findViewById(R.id.imgRandom);
 
         mRandom = new Random();
-        mTotalTime = 5000;
+        mTotalTime = 6000;
+
+        // set point
+        mTvPoint.setText(mPoint + "");
 
         //set max progressbar
         mProgressBarTime.setMax((int) (mTotalTime / 1000));
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         int index = mRandom.nextInt(mArrNameImages.length);
         mResourceIdRandom = getResources().getIdentifier(mArrNameImages[index], "drawable", getPackageName());
         mImgRandom.setImageResource(mResourceIdRandom);
+        MyCountDownTimer.getInstance().countDown(mTotalTime, 1000);
     }
 
 
@@ -100,8 +105,37 @@ public class MainActivity extends AppCompatActivity {
                         Intent data = result.getData();
                         int resourcePick = data.getIntExtra("resourceId",-1);
                         mImgPick.setImageResource(resourcePick);
+
+                        if (resourcePick == mResourceIdRandom){
+                            mPoint += 1;
+                            mTvPoint.setText(mPoint + "");
+                            Toast.makeText(MainActivity.this, "Chuẩn bị cho hình tiếp theo", Toast.LENGTH_SHORT).show();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    randomImage();
+                                }
+                            },1500);
+                        }else{
+                            Toast.makeText(MainActivity.this, "Bạn đã thua với số điểm : " + mPoint , Toast.LENGTH_SHORT).show();
+                            mProgressBarTime.setProgress(0);
+                        }
+                    }
+                    if (result.getResultCode() == Activity.RESULT_CANCELED){
+                        Intent data = result.getData();
+                        if (data != null ){
+                            String message = data.getStringExtra("message");
+                            if (!message.isEmpty()){
+                                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                                mProgressBarTime.setProgress(0);
+                            }
+                        }else{
+                            Toast.makeText(MainActivity.this, "Bạn không chọn hình", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Bạn đã thua với số điểm : " + mPoint , Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
+
 
 }
