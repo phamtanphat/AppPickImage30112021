@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -19,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements MyCountDownTimer.OnListenerMyCountDown{
 
     ProgressBar mProgressBarTime;
     TextView mTvPoint;
@@ -41,19 +40,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void event() {
-        // listener
-        MyCountDownTimer.getInstance().onListenerTime(new MyCountDownTimer.OnListenerMyCountDown() {
-            @Override
-            public void onTick(long currentTime) {
-                Log.d("BBB",currentTime + "");
-                mProgressBarTime.setProgress((int) (currentTime / 1000));
-            }
-
-            @Override
-            public void onFinish() {
-                mProgressBarTime.setProgress(0);
-            }
-        });
         // handle
         randomImage();
 
@@ -89,7 +75,7 @@ public class MainActivity extends AppCompatActivity{
         int index = mRandom.nextInt(mArrNameImages.length);
         mResourceIdRandom = getResources().getIdentifier(mArrNameImages[index], "drawable", getPackageName());
         mImgRandom.setImageResource(mResourceIdRandom);
-        MyCountDownTimer.getInstance().countDown(mTotalTime, 1000);
+        MyCountDownTimer.getInstance(this).countDown(mTotalTime, 1000);
     }
 
 
@@ -138,4 +124,13 @@ public class MainActivity extends AppCompatActivity{
             });
 
 
+    @Override
+    public void onTick(long currentTime) {
+        mProgressBarTime.setProgress((int) (currentTime / 1000));
+    }
+
+    @Override
+    public void onFinish() {
+        mProgressBarTime.setProgress(0);
+    }
 }

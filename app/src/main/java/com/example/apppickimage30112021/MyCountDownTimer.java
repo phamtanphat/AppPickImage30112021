@@ -1,19 +1,22 @@
 package com.example.apppickimage30112021;
 
 import android.os.CountDownTimer;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MyCountDownTimer {
     public static MyCountDownTimer instance;
     private CountDownTimer countDownTimer ;
     OnListenerMyCountDown onListenerMyCountDown;
 
-    private MyCountDownTimer(){
-
+    private MyCountDownTimer(AppCompatActivity activity){
+        onListenerMyCountDown = (OnListenerMyCountDown) activity;
     }
 
-    public static MyCountDownTimer getInstance(){
+    public static MyCountDownTimer getInstance(AppCompatActivity activity){
         if (instance == null){
-            instance = new MyCountDownTimer();
+            instance = new MyCountDownTimer(activity);
         }
         return instance;
     }
@@ -26,6 +29,7 @@ public class MyCountDownTimer {
             @Override
             public void onTick(long millisUntilFinished) {
                 if (millisUntilFinished >= 1000){
+                    Log.d("BBB", " onListener "  + onListenerMyCountDown);
                     if (onListenerMyCountDown != null){
                         onListenerMyCountDown.onTick(millisUntilFinished);
                     }
@@ -39,10 +43,6 @@ public class MyCountDownTimer {
                 }
             }
         }.start();
-    }
-
-    public void onListenerTime(OnListenerMyCountDown onListenerTime){
-        onListenerMyCountDown = onListenerTime;
     }
 
     public void cancelTime(){

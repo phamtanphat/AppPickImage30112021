@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity implements MyCountDownTimer.OnListenerMyCountDown {
 
     TableLayout mTbLayout;
     String[] mArrNameImages;
@@ -33,6 +33,8 @@ public class MainActivity2 extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
 
+
+        MyCountDownTimer.getInstance(this);
         // số cột : 3
         // số dòng : 6
 
@@ -61,19 +63,19 @@ public class MainActivity2 extends AppCompatActivity {
             }
             mTbLayout.addView(tableRow);
         }
-        MyCountDownTimer.getInstance().onListenerTime(new MyCountDownTimer.OnListenerMyCountDown() {
-            @Override
-            public void onTick(long currentTime) {
 
-            }
+    }
 
-            @Override
-            public void onFinish() {
-                Intent view = new Intent();
-                view.putExtra("message","Time out");
-                setResult(RESULT_CANCELED,view);
-                finish();
-            }
-        });
+    @Override
+    public void onTick(long currentTime) {
+
+    }
+
+    @Override
+    public void onFinish() {
+        Intent view = new Intent();
+        view.putExtra("message","Time out");
+        setResult(RESULT_CANCELED,view);
+        finish();
     }
 }
