@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     int mResourceIdRandom;
     Random mRandom;
     long mTotalTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTick(long currentTime) {
                 mProgressBarTime.setProgress((int) (currentTime / 1000));
-                Log.d("BBB","Current " + currentTime);
+                Log.d("BBB", "Current " + currentTime);
             }
 
             @Override
             public void onFinish() {
                 mProgressBarTime.setProgress(0);
-                Log.d("BBB","finish ");
+                Log.d("BBB", "finish ");
             }
         });
         // handle
@@ -57,14 +58,14 @@ public class MainActivity extends AppCompatActivity {
         mImgPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,MainActivity2.class);
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                 activityResultLauncher.launch(intent);
             }
         });
 
     }
 
-    private void init(){
+    private void init() {
         mProgressBarTime = findViewById(R.id.progressBarTime);
         mTvPoint = findViewById(R.id.textViewPoint);
         mImgPick = findViewById(R.id.imgPick);
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    // Get data from activity
     private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
