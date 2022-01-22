@@ -1,8 +1,10 @@
 package com.example.apppickimage30112021;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -41,6 +43,17 @@ public class MainActivity2 extends AppCompatActivity {
                 int resourceImage = getResources().getIdentifier(mArrNameImages[mPosition], "drawable", getPackageName());
                 ImageView imageView = new ImageView(this);
                 imageView.setImageResource(resourceImage);
+                imageView.setTag(resourceImage);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent view = new Intent();
+                        view.putExtra("resourceId",(int) imageView.getTag());
+                        setResult(RESULT_OK,view);
+                        finish();
+                    }
+                });
+
                 layoutParams.gravity =  Gravity.CENTER;
                 imageView.setLayoutParams(layoutParams);
                 tableRow.addView(imageView);

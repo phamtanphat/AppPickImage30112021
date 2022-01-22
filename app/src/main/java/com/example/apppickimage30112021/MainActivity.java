@@ -1,5 +1,6 @@
 package com.example.apppickimage30112021;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,11 +95,12 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-//                    if (result.getResultCode() == Activity.RESULT_OK) {
-//                        // There are no request codes
-//                        Intent data = result.getData();
-//                        doSomeOperations();
-//                    }
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        int resourcePick = data.getIntExtra("resourceId",-1);
+                        mImgPick.setImageResource(resourcePick);
+                    }
                 }
             });
 
