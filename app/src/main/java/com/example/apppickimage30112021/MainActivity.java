@@ -1,11 +1,17 @@
 package com.example.apppickimage30112021;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
@@ -48,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
         // handle
         randomImage();
 
+        mImgPick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,MainActivity2.class);
+                activityResultLauncher.launch(intent);
+            }
+        });
+
     }
 
     private void init(){
@@ -71,5 +85,18 @@ public class MainActivity extends AppCompatActivity {
         mImgRandom.setImageResource(mResourceIdRandom);
     }
 
+
+    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        // There are no request codes
+//                        Intent data = result.getData();
+//                        doSomeOperations();
+//                    }
+                }
+            });
 
 }
